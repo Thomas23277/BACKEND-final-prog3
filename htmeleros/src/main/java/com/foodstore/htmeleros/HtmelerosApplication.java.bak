@@ -1,0 +1,13 @@
+package com.foodstore.htmeleros;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HtmelerosApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HtmelerosApplication.class, args);
+	}
+
+}
