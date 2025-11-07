@@ -10,4 +10,6 @@ public interface ProductoService {
    Producto findById(Long id);
    void deleteById(Long id);
    Producto update(Producto producto);
+   Producto venderProducto(Long productoId, int cantidad);
+   Producto agregarStock(Long productoId, int cantidad);
 }

@@ -3,7 +3,6 @@ package com.foodstore.htmeleros.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
 import com.foodstore.htmeleros.entity.Producto;
 import com.foodstore.htmeleros.repository.ProductoRepository;
 
@@ -48,4 +47,28 @@ public class ProductoServiceImpl implements ProductoService  {
     public Producto update(Producto producto) {
         return productoRepository.save(producto);
     }
+
+
+    public Producto venderProducto(Long productoId, int cantidad) {
+    Producto producto = findById(productoId);
+
+    if (producto.getStock() == 0) {
+        throw new IllegalStateException("No hay stock disponible para este producto");
+    }
+
+    if (cantidad > producto.getStock()) {
+        throw new IllegalArgumentException("La cantidad solicitada supera el stock disponible");
+    }
+
+    producto.setStock(producto.getStock() - cantidad);
+    return productoRepository.save(producto);
+}
+
+    public Producto agregarStock(Long productoId, int cantidad) {
+    Producto producto = findById(productoId);
+    producto.setStock(producto.getStock() + cantidad);
+    return productoRepository.save(producto);
+}
+
+
 }
