@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.foodstore.htmeleros.entity.Categoria;
+import com.foodstore.htmeleros.exception.ResourceNotFoundException;
 import com.foodstore.htmeleros.repository.CategoriaRepository;
 
 
@@ -29,7 +30,13 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
         public Categoria findById(Long id) {
-        return categoriaRepository.findById(id).get();
+            Categoria categoria= categoriaRepository.findById(id).orElseThrow(
+                 ()->{
+                    throw new ResourceNotFoundException("Categoria con id:"+id+" no encontrado");
+                 }
+            );
+       
+        return categoria;
     }
     
     @Override

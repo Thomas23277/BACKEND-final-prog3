@@ -82,11 +82,14 @@ public Producto updateProducto(@RequestBody Producto producto) {
     return productoService.update(productoDb);
 }
 
+    //http://localhost:8080/api/producto/1/vender/5
 @PostMapping("/{id}/vender/{cantidad}")
 public Producto vender(@PathVariable Long id, @PathVariable int cantidad) {
     return productoService.venderProducto(id, cantidad);
 }
 
+
+    //http://localhost:8080/api/producto/1/agregar-stock/10
 @PostMapping("/{id}/agregar-stock/{cantidad}")
 public Producto agregarStock(@PathVariable Long id, @PathVariable int cantidad) {
     return productoService.agregarStock(id, cantidad);

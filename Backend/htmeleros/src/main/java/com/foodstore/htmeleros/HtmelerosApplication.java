@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import com.foodstore.htmeleros.auth.entity.User;
-import com.foodstore.htmeleros.auth.repository.AuthUserRepository;
+import com.foodstore.htmeleros.auth.repository.UserRepository;
 import com.foodstore.htmeleros.auth.util.Sha256Util;
 
 @SpringBootApplication
@@ -21,7 +21,7 @@ public class HtmelerosApplication {
      * Password: Admin123
      */
     @Bean
-    public CommandLineRunner createDefaultAdmin(AuthUserRepository userRepository) {
+    public CommandLineRunner createDefaultAdmin(UserRepository userRepository) {
         return args -> {
             final String adminEmail = "user@admin.com";
             final String adminPass = "Admin123";
