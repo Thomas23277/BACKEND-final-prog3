@@ -1,18 +1,12 @@
 package com.foodstore.htmeleros.controller;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.foodstore.htmeleros.entity.Usuario;
 import com.foodstore.htmeleros.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -23,45 +17,66 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     /**
-     * Registrar o recuperar usuario existente por email.
-     * Si ya existe, lo devuelve. Si no existe, lo crea con el nombre recibido.
+     * ✅ LOGIN: Solo permite iniciar sesión si el usuario existe
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginORegistrar(
+    public ResponseEntity<?> login(
             @RequestParam String email,
-            @RequestParam(required = false) String nombre
+            @RequestParam String password
     ) {
         try {
-            //Buscar usuario existente
+            Optional<Usuario> existente = usuarioRepository.findByEmail(email);
+
+            if (existente.isEmpty()) {
+                return ResponseEntity.badRequest().body("Usuario no encontrado");
+            }
+
+            Usuario usuario = existente.get();
+
+            if (!usuario.getPassword().equals(password)) {
+                return ResponseEntity.badRequest().body("Contraseña incorrecta");
+            }
+
+            return ResponseEntity.ok(usuario);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error al iniciar sesión: " + e.getMessage());
+        }
+    }
+
+    /**
+     * ✅ REGISTRO: Crea un nuevo usuario solo si no existe
+     */
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestParam String email,
+            @RequestParam String nombre,
+            @RequestParam String password
+    ) {
+        try {
             Optional<Usuario> existente = usuarioRepository.findByEmail(email);
 
             if (existente.isPresent()) {
-                //Devuelve el usuario con ID correcto
-                return ResponseEntity.ok(existente.get());
-            }
-
-            //Crear nuevo usuario si no existe
-            if (nombre == null || nombre.isBlank()) {
-                nombre = "Invitado";
+                return ResponseEntity.badRequest().body("El email ya está registrado");
             }
 
             Usuario nuevo = new Usuario();
             nuevo.setNombre(nombre);
             nuevo.setEmail(email);
+            nuevo.setPassword(password);
 
-            //Guardar y devolver el objeto con ID generado por JPA
             Usuario guardado = usuarioRepository.save(nuevo);
             return ResponseEntity.ok(guardado);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest()
-                    .body("Error al registrar o recuperar usuario: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error al registrar usuario: " + e.getMessage());
         }
     }
 
     /**
-     * Listar todos los usuarios
+     * ✅ Listar todos los usuarios
      */
     @GetMapping
     public ResponseEntity<Object> listarUsuarios() {
@@ -69,7 +84,7 @@ public class UsuarioController {
     }
 
     /**
-     * Obtener un usuario por su ID
+     * ✅ Obtener un usuario por su ID
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> obtenerPorId(@PathVariable Long id) {
@@ -78,5 +93,3 @@ public class UsuarioController {
                 .orElseGet(() -> ResponseEntity.badRequest().body("Usuario no encontrado"));
     }
 }
-
-

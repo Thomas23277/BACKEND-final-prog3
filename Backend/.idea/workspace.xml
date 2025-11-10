@@ -4,23 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4d9818b2-7d4c-4aff-8c0e-7cc8baaf60cb" name="Changes" comment="" />
+    <list default="true" id="bf638aa8-8a31-4851-b0c5-38660749b9dc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/HtmelerosApplication.java.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/auth/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/auth/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/controller/PedidoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/controller/PedidoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/entity/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/entity/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/repository/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/repository/UsuarioRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/service/PedidoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/service/PedidoServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/service/UsuarioServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/java/com/foodstore/htmeleros/service/UsuarioServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmeleros/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/htmeleros/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
-}</component>
-  <component name="ProjectId" id="34zH3cLnxe6nrR8BaWC3Sr3rTAS" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="35Gi7AjtnXoy7c8hGzw5az3XMyY" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -29,8 +44,12 @@
   "keyToString": {
     "Application.HtmelerosApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "backend-food",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/venom/Downloads/final-prog3/Food-Store/Backend"
+    "last_opened_file_path": "C:/Users/venom/Downloads/Backend",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
   <component name="RunManager">
@@ -56,11 +75,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4d9818b2-7d4c-4aff-8c0e-7cc8baaf60cb" name="Changes" comment="" />
-      <created>1762209282217</created>
+      <changelist id="bf638aa8-8a31-4851-b0c5-38660749b9dc" name="Changes" comment="" />
+      <created>1762742639333</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1762209282217</updated>
+      <updated>1762742639333</updated>
     </task>
     <servers />
   </component>
