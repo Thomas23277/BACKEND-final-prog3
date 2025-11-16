@@ -2,13 +2,18 @@ package com.foodstore.htmeleros.service;
 
 import java.util.List;
 
-import com.foodstore.htmeleros.entity.DetallePedido;
+import com.foodstore.htmeleros.dto.DetallePedidoDTO;
 
 
 public interface DetallePedidoService {
-    DetallePedido save(DetallePedido detalle);
-    List<DetallePedido> findAll();
-    DetallePedido findById(Long id);
+
+    DetallePedidoDTO save(DetallePedidoDTO detalle);
+
+    List<DetallePedidoDTO> findAll();
+
+    DetallePedidoDTO findById(Long id);
+
     void deleteById(Long id);
-    DetallePedido update(Long id, DetallePedido nuevo);
+
+    DetallePedidoDTO update(Long id, DetallePedidoDTO nuevo);
 }

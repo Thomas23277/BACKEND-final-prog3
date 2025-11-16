@@ -2,66 +2,87 @@ package com.foodstore.htmeleros.controller;
 
 import java.util.List;
 
+import com.foodstore.htmeleros.dto.PedidoDTO;
+import com.foodstore.htmeleros.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.foodstore.htmeleros.entity.Pedido;
-import com.foodstore.htmeleros.service.PedidoService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/pedidos")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "http://localhost:5176",
+        "http://localhost:8081"
+})
 public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
 
-
-    //http://localhost:8080/api/pedidos
+    // Crear nuevo pedido
     @PostMapping
-    public ResponseEntity<Pedido> crear(@RequestBody Pedido pedido) {
-        Pedido creado = pedidoService.save(pedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    public ResponseEntity<?> crear(@RequestBody PedidoDTO pedidoDTO) {
+        try {
+            PedidoDTO creado = pedidoService.save(pedidoDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error de validación: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear el pedido: " + e.getMessage());
+        }
     }
 
-
-    //http://localhost:8080/api/pedidos
+    // Listar todos los pedidos
     @GetMapping
-    public ResponseEntity<List<Pedido>> listar() {
+    public ResponseEntity<List<PedidoDTO>> listar() {
         return ResponseEntity.ok(pedidoService.findAll());
     }
 
-
-
-    //http://localhost:8080/api/pedidos/1
+    // Obtener un pedido por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(pedidoService.findById(id));
+    public ResponseEntity<PedidoDTO> obtener(@PathVariable Long id) {
+        PedidoDTO pedido = pedidoService.findById(id);
+        if (pedido != null) {
+            return ResponseEntity.ok(pedido);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-
-    //http://localhost:8080/api/pedidos/1
+    // Actualizar pedido existente
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> actualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
-        Pedido actualizado = pedidoService.update(id, pedido);
-        return ResponseEntity.ok(actualizado);
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody PedidoDTO pedidoDTO) {
+        try {
+            PedidoDTO actualizado = pedidoService.update(id, pedidoDTO);
+            return ResponseEntity.ok(actualizado);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar el pedido: " + e.getMessage());
+        }
     }
 
-
-
-    //http://localhost:8080/api/pedidos/1
+    // Eliminar pedido por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        pedidoService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        try {
+            pedidoService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar el pedido: " + e.getMessage());
+        }
     }
 }
+
 

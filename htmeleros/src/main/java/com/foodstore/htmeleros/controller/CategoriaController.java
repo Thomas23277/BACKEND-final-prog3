@@ -2,6 +2,8 @@ package com.foodstore.htmeleros.controller;
 
 import java.util.List;
 
+import com.foodstore.htmeleros.dto.CategoriaDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,46 +16,41 @@ import org.springframework.web.bind.annotation.RestController;
 import com.foodstore.htmeleros.entity.Categoria;
 import com.foodstore.htmeleros.service.CategoriaService;
 
-@RestController
+
 //http://localhost:8080/api/categoria
-@RequestMapping("/api/categoria")  
+@RestController
+@RequestMapping("/categorias")
 public class CategoriaController {
 
     private final CategoriaService categoriaService;
-    
-    public CategoriaController(CategoriaService categoriaService) {this.categoriaService = categoriaService;}
 
-    //http://localhost:8080/api/categoria
-    @PostMapping
-    public Categoria save(@RequestBody Categoria categoria) {return categoriaService.save(categoria);}
-
-
-    //http://localhost:8080/api/categoria
-    @GetMapping
-    public List<Categoria> findAll() {return categoriaService.findAll();}
-
-    
-
-
-    //http://localhost:8080/api/categoria/1
-    @GetMapping("/{id}")
-    public Categoria findById(@PathVariable() Long id) {return categoriaService.findById(id);}
-
-
-    //http://localhost:8080/api/categoria/1
-    @DeleteMapping({"/{id}"})
-    public void deleteById(@PathVariable() Long id){
-        categoriaService.deleteById(id);
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
     }
 
+    @PostMapping
+    public ResponseEntity<CategoriaDTO> save(@RequestBody CategoriaDTO dto) {
+        return ResponseEntity.ok(categoriaService.save(dto));
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoriaService.findById(id));
+    }
 
-    //http://localhost:8080/api/categoria
-    @PutMapping
-    public Categoria updateCategoria(@RequestBody Categoria categoria){
-        Categoria categoriaDb= categoriaService.findById(categoria.getId());
-        categoriaDb.setNombre(categoria.getNombre());
-        return categoriaService.update(categoriaDb);
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> findAll() {
+        return ResponseEntity.ok(categoriaService.findAll());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaDTO> update(@PathVariable Long id, @RequestBody CategoriaDTO dto) {
+        return ResponseEntity.ok(categoriaService.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        categoriaService.deleteById(id);
     }
 }
 

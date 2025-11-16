@@ -12,4 +12,5 @@ import com.foodstore.htmeleros.entity.Producto;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findByCategoria(Categoria categoria);
+
 }

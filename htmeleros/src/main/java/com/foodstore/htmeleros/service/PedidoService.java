@@ -1,13 +1,12 @@
 package com.foodstore.htmeleros.service;
 
+import com.foodstore.htmeleros.dto.PedidoDTO;
 import java.util.List;
 
-import com.foodstore.htmeleros.entity.Pedido;
-
 public interface PedidoService {
-    Pedido save(Pedido pedido);
-    List<Pedido> findAll();
-    Pedido findById(Long id);
+    PedidoDTO save(PedidoDTO pedido);
+    List<PedidoDTO> findAll();
+    PedidoDTO findById(Long id);
     void deleteById(Long id);
-    Pedido update(Long id, Pedido nuevo);
+    PedidoDTO update(Long id, PedidoDTO nuevo);
 }

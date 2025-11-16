@@ -2,101 +2,82 @@ package com.foodstore.htmeleros.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
-import com.foodstore.htmeleros.entity.Categoria;
-import com.foodstore.htmeleros.entity.Producto;
-import com.foodstore.htmeleros.repository.ProductoRepository;
+import com.foodstore.htmeleros.dto.ProductoDTO;
+import com.foodstore.htmeleros.dto.CategoriaDTO;
 import com.foodstore.htmeleros.service.CategoriaService;
 import com.foodstore.htmeleros.service.ProductoService;
 
 @RestController
-//http://localhost:8080/api/producto
-@RequestMapping("/api/producto")  
+@RequestMapping("/api/producto")
 public class ProductoController {
 
     private final ProductoService productoService;
     private final CategoriaService categoriaService;
-    private final ProductoRepository productoRepository;
 
-    public ProductoController(ProductoService productoService, CategoriaService categoriaService, ProductoRepository productoRepository) {
+    public ProductoController(ProductoService productoService, CategoriaService categoriaService) {
         this.productoService = productoService;
         this.categoriaService = categoriaService;
-        this.productoRepository = productoRepository;
     }
 
-    //http://localhost:8080/api/producto
+    // Crear producto
     @PostMapping
-    public Producto save(@RequestBody Producto producto) {
-        Long categoriaId = producto.getCategoria().getId();
-        Categoria categoria = categoriaService.findById(categoriaId);
-        producto.setCategoria(categoria);
-        return productoService.save(producto);
+    public ResponseEntity<ProductoDTO> save(@RequestBody ProductoDTO productoDTO) {
+        Long categoriaId = productoDTO.getCategoria().getId();
+        CategoriaDTO categoriaDTO = categoriaService.findById(categoriaId);
+        productoDTO.setCategoria(categoriaDTO);
+
+        ProductoDTO creado = productoService.save(productoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-
-    //http://localhost:8080/api/producto/categoria/1
+    // Buscar productos por categoría (usando service directamente)
     @GetMapping("/categoria/{categoriaId}")
-    public List<Producto> findByCategoria(@PathVariable Long categoriaId) {
-    Categoria categoria = categoriaService.findById(categoriaId);
-    return productoRepository.findByCategoria(categoria);
-}
-
-
-    //http://localhost:8080/api/producto
-    @GetMapping
-    public List<Producto> findAll() {return productoService.findAll();}
-
-
-    //http://localhost:8080/api/producto/1
-    @GetMapping("/{id}")
-    public Producto findById(@PathVariable() Long id) {return productoService.findById(id);}
-
-
-    //http://localhost:8080/api/producto/1
-    @DeleteMapping({"/{id}"})
-    public void deleteById(@PathVariable() Long id){
-        productoService.deleteById(id);
+    public ResponseEntity<List<ProductoDTO>> findByCategoria(@PathVariable Long categoriaId) {
+        List<ProductoDTO> productos = productoService.findByCategoria(categoriaId);
+        return ResponseEntity.ok(productos);
     }
 
+    // Listar todos los productos
+    @GetMapping
+    public ResponseEntity<List<ProductoDTO>> findAll() {
+        return ResponseEntity.ok(productoService.findAll());
+    }
 
+    // Obtener producto por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductoDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(productoService.findById(id));
+    }
 
-    //http://localhost:8080/api/producto
+    // Eliminar producto
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        productoService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Actualizar producto
     @PutMapping
-public Producto updateProducto(@RequestBody Producto producto) {
-    Producto productoDb = productoService.findById(producto.getId());
-    productoDb.setNombre(producto.getNombre());
-    productoDb.setPrecio(producto.getPrecio());
+    public ResponseEntity<ProductoDTO> updateProducto(@RequestBody ProductoDTO productoDTO) {
+        ProductoDTO actualizado = productoService.update(productoDTO);
+        return ResponseEntity.ok(actualizado);
+    }
 
-    Long categoriaId = producto.getCategoria().getId();
-    Categoria categoria = categoriaService.findById(categoriaId);
-    productoDb.setCategoria(categoria);
+    // Vender producto
+    @PostMapping("/{id}/vender/{cantidad}")
+    public ResponseEntity<ProductoDTO> vender(@PathVariable Long id, @PathVariable int cantidad) {
+        ProductoDTO vendido = productoService.venderProducto(id, cantidad);
+        return ResponseEntity.ok(vendido);
+    }
 
-    return productoService.update(productoDb);
+    // Agregar stock
+    @PostMapping("/{id}/agregar-stock/{cantidad}")
+    public ResponseEntity<ProductoDTO> agregarStock(@PathVariable Long id, @PathVariable int cantidad) {
+        ProductoDTO actualizado = productoService.agregarStock(id, cantidad);
+        return ResponseEntity.ok(actualizado);
+    }
 }
-
-    //http://localhost:8080/api/producto/1/vender/5
-@PostMapping("/{id}/vender/{cantidad}")
-public Producto vender(@PathVariable Long id, @PathVariable int cantidad) {
-    return productoService.venderProducto(id, cantidad);
-}
-
-
-    //http://localhost:8080/api/producto/1/agregar-stock/10
-@PostMapping("/{id}/agregar-stock/{cantidad}")
-public Producto agregarStock(@PathVariable Long id, @PathVariable int cantidad) {
-    return productoService.agregarStock(id, cantidad);
-}
-
-
-
-
-}
-

@@ -3,6 +3,7 @@ package com.foodstore.htmeleros.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.foodstore.htmeleros.enums.Estado;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,11 +31,11 @@ public class Pedido {
     private Long id;
 
     private LocalDateTime fecha;
-
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-
+    private Estado estado;
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetallePedido> detalles;
+    private double total;
 }

@@ -1,68 +1,71 @@
 package com.foodstore.htmeleros.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.foodstore.htmeleros.dto.UsuarioDTO;
+import com.foodstore.htmeleros.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-import com.foodstore.htmeleros.entity.Usuario;
-import com.foodstore.htmeleros.service.UsuarioService;
 @RestController
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "http://localhost:5176",
+        "http://localhost:8080"
+})
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-
-    //http://localhost:8080/api/usuarios
-    @PostMapping
-    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
-        Usuario creado = usuarioService.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
+    // Registro: solo nombre, apellido, email y contraseña (celular opcional)
+    @PostMapping("/register")
+    public ResponseEntity<UsuarioDTO> registrar(@Valid @RequestBody UsuarioDTO usuarioDTO) {
+        UsuarioDTO guardado = usuarioService.save(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
+    }
 
+    // Login: email + contraseña en texto plano (el service compara SHA-256)
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginRequest request) {
+        UsuarioDTO usuario = usuarioService.login(request.getEmail(), request.getContrasenia());
+        return ResponseEntity.ok(usuario);
+    }
 
-    //http://localhost:8080/api/usuarios
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() {
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
         return ResponseEntity.ok(usuarioService.findAll());
     }
 
-
-
-    //http://localhost:8080/api/usuarios/1
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioService.findById(id));
+    public ResponseEntity<UsuarioDTO> obtenerPorId(@PathVariable Long id) {
+        UsuarioDTO usuario = usuarioService.findById(id);
+        return ResponseEntity.ok(usuario);
     }
 
-
-
-    //http://localhost:8080/api/usuarios/1
-    @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        Usuario actualizado = usuarioService.update(id, usuario);
-        return ResponseEntity.ok(actualizado);
+    @GetMapping("/buscar")
+    public ResponseEntity<UsuarioDTO> buscarPorEmail(@RequestParam String email) {
+        UsuarioDTO usuario = usuarioService.findByEmail(email);
+        if (usuario != null) return ResponseEntity.ok(usuario);
+        return ResponseEntity.notFound().build();
     }
 
+    // DTO interno para login
+    public static class LoginRequest {
+        private String email;
+        private String contrasenia;
 
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
 
-    //http://localhost:8080/api/usuarios/1
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        usuarioService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        public String getContrasenia() { return contrasenia; }
+        public void setContrasenia(String contrasenia) { this.contrasenia = contrasenia; }
     }
 }
-

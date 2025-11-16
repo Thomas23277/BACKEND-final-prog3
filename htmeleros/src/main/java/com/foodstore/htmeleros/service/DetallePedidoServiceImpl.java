@@ -1,13 +1,14 @@
 package com.foodstore.htmeleros.service;
 
-import java.util.List;
-
+import com.foodstore.htmeleros.dto.DetallePedidoDTO;
+import com.foodstore.htmeleros.entity.DetallePedido;
+import com.foodstore.htmeleros.exception.ResourceNotFoundException;
+import com.foodstore.htmeleros.mappers.DetallePedidoMapper;
+import com.foodstore.htmeleros.repository.DetallePedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.foodstore.htmeleros.entity.DetallePedido;
-import com.foodstore.htmeleros.repository.DetallePedidoRepository;
-
+import java.util.List;
 
 @Service
 public class DetallePedidoServiceImpl implements DetallePedidoService {
@@ -16,34 +17,44 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
     private DetallePedidoRepository repository;
 
     @Override
-    public DetallePedido save(DetallePedido detalle) {
+    public DetallePedidoDTO save(DetallePedidoDTO dto) {
+        DetallePedido detalle = DetallePedidoMapper.toEntity(dto);
         detalle.setSubtotal(detalle.getCantidad() * detalle.getPrecioUnitario());
-        return repository.save(detalle);
+        DetallePedido guardado = repository.save(detalle);
+        return DetallePedidoMapper.toDTO(guardado);
     }
 
     @Override
-    public List<DetallePedido> findAll() {
-        return repository.findAll();
+    public List<DetallePedidoDTO> findAll() {
+        return repository.findAll().stream()
+                .map(DetallePedidoMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public DetallePedido findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("DetallePedido no encontrado"));
+    public DetallePedidoDTO findById(Long id) {
+        DetallePedido detalle = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetallePedido con id:" + id + " no encontrado"));
+        return DetallePedidoMapper.toDTO(detalle);
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        DetallePedido detalle = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetallePedido con id:" + id + " no encontrado"));
+        repository.delete(detalle);
     }
 
     @Override
-    public DetallePedido update(Long id, DetallePedido nuevo) {
-        DetallePedido actual = findById(id);
+    public DetallePedidoDTO update(Long id, DetallePedidoDTO nuevo) {
+        DetallePedido actual = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DetallePedido con id:" + id + " no encontrado"));
+
         actual.setCantidad(nuevo.getCantidad());
         actual.setPrecioUnitario(nuevo.getPrecioUnitario());
         actual.setSubtotal(nuevo.getCantidad() * nuevo.getPrecioUnitario());
-        return repository.save(actual);
+
+        DetallePedido actualizado = repository.save(actual);
+        return DetallePedidoMapper.toDTO(actualizado);
     }
 }
-

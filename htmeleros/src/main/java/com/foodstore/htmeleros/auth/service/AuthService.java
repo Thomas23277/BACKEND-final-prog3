@@ -1,13 +1,16 @@
 package com.foodstore.htmeleros.auth.service;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.foodstore.htmeleros.auth.dto.RegisterRequest;
 import com.foodstore.htmeleros.auth.dto.UserResponse;
 import com.foodstore.htmeleros.auth.entity.User;
 import com.foodstore.htmeleros.auth.repository.UserRepository;
 import com.foodstore.htmeleros.auth.util.Sha256Util;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
@@ -20,7 +23,7 @@ public class AuthService {
     @Transactional
     public UserResponse register(RegisterRequest req) {
         if (userRepository.existsByEmail(req.email())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new IllegalArgumentException("Email ya registrado");
         }
 
         User user = User.builder()
@@ -35,14 +38,18 @@ public class AuthService {
     }
 
     public UserResponse login(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+        Optional<User> user = userRepository.findByEmail(email);
 
-        String hashed = Sha256Util.hash(password);
-        if (!user.getPassword().equals(hashed)) {
-            throw new IllegalArgumentException("Invalid credentials");
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado");
         }
 
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
+        User u = user.get();
+
+        if (!u.getPassword().equals(Sha256Util.hash(password))) {
+            throw new IllegalArgumentException("Contraseña incorrecta");
+        }
+
+        return new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getRole());
     }
 }

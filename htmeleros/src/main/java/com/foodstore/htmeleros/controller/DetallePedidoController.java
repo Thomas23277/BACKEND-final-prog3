@@ -2,7 +2,9 @@ package com.foodstore.htmeleros.controller;
 
 import java.util.List;
 
+import com.foodstore.htmeleros.dto.DetallePedidoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,43 +18,38 @@ import com.foodstore.htmeleros.entity.DetallePedido;
 import com.foodstore.htmeleros.service.DetallePedidoService;
 
 @RestController
-@RequestMapping("/api/detalle-pedido")
+@RequestMapping("/detalles")
 public class DetallePedidoController {
 
-    @Autowired
-    private DetallePedidoService service;
+    private final DetallePedidoService detalleService;
 
+    public DetallePedidoController(DetallePedidoService detalleService) {
+        this.detalleService = detalleService;
+    }
 
-    //http://localhost:8080/api/detalle-pedido
     @PostMapping
-    public DetallePedido crear(@RequestBody DetallePedido detalle) {
-        return service.save(detalle);
+    public ResponseEntity<DetallePedidoDTO> save(@RequestBody DetallePedidoDTO dto) {
+        return ResponseEntity.ok(detalleService.save(dto));
     }
 
-
-    //http://localhost:8080/api/detalle-pedido
     @GetMapping
-    public List<DetallePedido> listar() {
-        return service.findAll();
+    public ResponseEntity<List<DetallePedidoDTO>> findAll() {
+        return ResponseEntity.ok(detalleService.findAll());
     }
 
-
-    //http://localhost:8080/api/detalle-pedido/1
     @GetMapping("/{id}")
-    public DetallePedido obtener(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<DetallePedidoDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(detalleService.findById(id));
     }
 
-
-    //http://localhost:8080/api/detalle-pedido/1
     @PutMapping("/{id}")
-    public DetallePedido actualizar(@PathVariable Long id, @RequestBody DetallePedido detalle) {
-        return service.update(id, detalle);
+    public ResponseEntity<DetallePedidoDTO> update(@PathVariable Long id, @RequestBody DetallePedidoDTO dto) {
+        return ResponseEntity.ok(detalleService.update(id, dto));
     }
 
-    //http://localhost:8080/api/detalle-pedido/1
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        service.deleteById(id);
+    public void delete(@PathVariable Long id) {
+        detalleService.deleteById(id);
     }
 }
+

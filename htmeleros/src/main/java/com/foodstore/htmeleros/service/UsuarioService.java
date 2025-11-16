@@ -1,13 +1,14 @@
 package com.foodstore.htmeleros.service;
 
+import com.foodstore.htmeleros.dto.UsuarioDTO;
 import java.util.List;
 
-import com.foodstore.htmeleros.entity.Usuario;
-
 public interface UsuarioService {
-    Usuario save(Usuario usuario);
-    List<Usuario> findAll();
-    Usuario findById(Long id);
+    UsuarioDTO save(UsuarioDTO usuarioDTO);
+    List<UsuarioDTO> findAll();
+    UsuarioDTO findById(Long id);
     void deleteById(Long id);
-    Usuario update(Long id, Usuario nuevo);
+    UsuarioDTO update(Long id, UsuarioDTO nuevo);
+    UsuarioDTO findByEmail(String email);
+    UsuarioDTO login(String email, String contraseniaPlano);
 }
